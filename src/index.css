@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+
+/*
+ * Дизайн-токены Createx (из макета).
+ * Используйте классы: text-primary, bg-dark, text-gray-700, bg-marketing и т.д.
+ * Не хардкодьте цвета в компонентах — добавляйте их сюда.
+ */
+@theme {
+  --font-sans: 'Lato', ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #ff3f3a;
+  --color-primary-dark: #f75e05;
+  --color-dark: #1e212c;
+  --color-dark-light: #282a33;
+
+  --color-gray-900: #1e212c;
+  --color-gray-800: #424551;
+  --color-gray-700: #787a80;
+  --color-gray-600: #b2b3b8;
+  --color-gray-500: #d7dadd;
+  --color-gray-400: #e5e8ed;
+  --color-gray-300: #f4f5f6;
+  --color-gray-200: #f8f9fa;
+
+  --color-accent-yellow: #ffcd29;
+  --color-pink-light: #ffe7e0;
+
+  /* Цвета категорий курсов/постов */
+  --color-marketing: #03cea4;
+  --color-management: #5a87fc;
+  --color-hr: #f89828;
+  --color-design: #f52f6e;
+  --color-development: #7772f1;
+
+  --shadow-card: 0 30px 60px -10px rgb(30 33 44 / 0.12);
+  --shadow-card-sm: 0 10px 30px -5px rgb(30 33 44 / 0.1);
+
+  --container-site: 1200px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-gray-800 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-black text-dark;
+  }
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: calc(var(--container-site) + 2rem);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@utility bg-gradient-primary {
+  background-image: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+}
+
+@utility bg-gradient-pink {
+  background-image: linear-gradient(90deg, #ffe7e0 0%, #fdd3ce 100%);
+}

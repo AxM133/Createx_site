@@ -1,0 +1,27 @@
+import { Outlet, useMatches } from 'react-router-dom'
+import clsx from 'clsx'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import ScrollToTop from '@/components/layout/ScrollToTop'
+import AuthModals from '@/components/auth/AuthModals'
+import { AuthModalProvider } from '@/context/AuthModalProvider'
+
+export default function MainLayout() {
+  // Страницы с цветным hero под шапкой: handle: { headerOverlay: true } в роутере
+  const headerOverlay = useMatches().some((match) => match.handle?.headerOverlay)
+
+  return (
+    <AuthModalProvider>
+      <ScrollToTop />
+      <div className="flex min-h-screen flex-col">
+        <Header overlay={headerOverlay} />
+        {/* При overlay контент заезжает под шапку — в hero нужен верхний отступ (pt-20 lg:pt-[92px]) */}
+        <main className={clsx('flex-1', headerOverlay && '-mt-20 lg:-mt-[92px]')}>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+      <AuthModals />
+    </AuthModalProvider>
+  )
+}
