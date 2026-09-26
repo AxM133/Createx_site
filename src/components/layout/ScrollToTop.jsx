@@ -6,7 +6,8 @@ export default function ScrollToTop() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    // instant — иначе html { scroll-behavior: smooth } прокручивает страницу анимированно
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
 
   return null

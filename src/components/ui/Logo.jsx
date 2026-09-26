@@ -9,13 +9,17 @@ export default function Logo({ variant = 'dark', className }) {
       to={ROUTES.home}
       aria-label="Createx — на главную"
       className={clsx(
-        'inline-flex items-center text-2xl font-black tracking-[0.08em]',
+        'group inline-flex items-center text-2xl font-black tracking-[0.08em]',
         variant === 'light' ? 'text-white' : 'text-dark',
         className,
       )}
     >
       CREATE
-      <svg viewBox="0 0 20 22" className="h-[0.8em] w-[0.75em]" aria-hidden="true">
+      <svg
+        viewBox="0 0 20 22"
+        className="h-[0.8em] w-[0.75em] transition-transform duration-500 ease-spring group-hover:translate-x-1"
+        aria-hidden="true"
+      >
         <path
           d="M2 2l7 9-7 9M11 2l7 9-7 9"
           fill="none"

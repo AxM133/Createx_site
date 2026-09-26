@@ -36,6 +36,33 @@
   --shadow-card-sm: 0 10px 30px -5px rgb(30 33 44 / 0.1);
 
   --container-site: 1200px;
+
+  /* Анимации: animate-fade-up, animate-float, ease-out-expo и т.д. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-fade-up: fade-up 0.8s var(--ease-out-expo) both;
+  --animate-fade-in: fade-in 0.5s ease-out both;
+  --animate-zoom-in: zoom-in 1s var(--ease-out-expo) both;
+  --animate-clip-in: clip-in 1.1s var(--ease-out-expo) both;
+  --animate-word-up: word-up 0.9s var(--ease-out-expo) both;
+  --animate-slide-in-right: slide-in-right 0.7s var(--ease-out-expo) both;
+  --animate-slide-in-left: slide-in-left 0.7s var(--ease-out-expo) both;
+  --animate-page-in: page-in 0.6s var(--ease-out-expo) backwards;
+  --animate-header-in: header-in 0.8s var(--ease-out-expo) both;
+  --animate-modal-in: modal-in 0.5s var(--ease-spring) both;
+  --animate-modal-out: modal-out 0.25s ease-in both;
+  --animate-backdrop-in: fade-in 0.3s ease-out both;
+  --animate-backdrop-out: fade-out 0.25s ease-in both;
+  --animate-pop: pop 0.6s var(--ease-spring) both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float-slow 9s ease-in-out infinite;
+  --animate-sway: sway 8s ease-in-out infinite alternate;
+  --animate-drift: drift 18s ease-in-out infinite;
+  --animate-ping-ring: ping-ring 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-heartbeat: heartbeat 1.6s ease-in-out infinite;
+  --animate-gradient: gradient-pan 6s ease-in-out infinite;
+  --animate-progress: progress 7s linear both;
 }
 
 @layer base {
@@ -45,6 +72,10 @@
 
   body {
     @apply bg-white font-sans text-gray-800 antialiased;
+  }
+
+  ::selection {
+    @apply bg-primary text-white;
   }
 
   h1,
@@ -68,4 +99,331 @@
 
 @utility bg-gradient-pink {
   background-image: linear-gradient(90deg, #ffe7e0 0%, #fdd3ce 100%);
+}
+
+/* ───────────────────────── Анимации ───────────────────────── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes clip-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: scale(1.12);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes word-up {
+  from {
+    transform: translate3d(0, 110%, 0) rotate(4deg);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translate3d(48px, 0, 0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-48px, 0, 0);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+}
+
+@keyframes header-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.94);
+  }
+}
+
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.97);
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes float {
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes float-slow {
+  33% {
+    transform: translate3d(6px, -18px, 0) rotate(6deg);
+  }
+  66% {
+    transform: translate3d(-8px, 8px, 0) rotate(-4deg);
+  }
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(3deg);
+  }
+  to {
+    transform: rotate(-3deg) scale(1.03);
+  }
+}
+
+@keyframes drift {
+  33% {
+    transform: translate3d(40px, -30px, 0) scale(1.1);
+  }
+  66% {
+    transform: translate3d(-30px, 25px, 0) scale(0.92);
+  }
+}
+
+@keyframes ping-ring {
+  from {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+@keyframes heartbeat {
+  0%,
+  45%,
+  100% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.3);
+  }
+  30% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes gradient-pan {
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/*
+ * Появление при скролле — компонент <Reveal effect="up|down|left|right|zoom|blur|clip" delay={ms}>.
+ * Работает через IntersectionObserver: когда элемент попадает в экран, добавляется .is-revealed.
+ */
+@layer components {
+  [data-reveal] {
+    opacity: 0;
+    transition:
+      opacity 0.9s var(--ease-out-expo),
+      transform 1s var(--ease-out-expo),
+      filter 0.9s var(--ease-out-expo),
+      clip-path 1.2s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal='up'] {
+    transform: translate3d(0, 40px, 0);
+  }
+  [data-reveal='down'] {
+    transform: translate3d(0, -40px, 0);
+  }
+  [data-reveal='left'] {
+    transform: translate3d(-56px, 0, 0);
+  }
+  [data-reveal='right'] {
+    transform: translate3d(56px, 0, 0);
+  }
+  [data-reveal='zoom'] {
+    transform: scale(0.9);
+  }
+  [data-reveal='blur'] {
+    filter: blur(12px);
+    transform: translate3d(0, 20px, 0);
+  }
+  [data-reveal].is-revealed {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  /* clip обрезает дочерний элемент: IntersectionObserver не видит полностью обрезанный target */
+  [data-reveal='clip'] {
+    opacity: 1;
+  }
+  [data-reveal='clip'] > * {
+    clip-path: inset(0 100% 0 0);
+    transform: scale(1.12);
+    transition:
+      clip-path 1.2s var(--ease-out-expo),
+      transform 1.6s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal='clip'].is-revealed > * {
+    clip-path: inset(0);
+    transform: none;
+  }
+}
+
+/* Параллакс за курсором (нужен usePointerVars на родителе): parallax-20 = сдвиг до ±10px */
+@utility parallax-* {
+  translate: calc(var(--mx, 0) * --value(integer) * 1px) calc(var(--my, 0) * --value(integer) * 1px);
+  transition: translate 0.8s var(--ease-out-expo);
+}
+
+@utility -parallax-* {
+  translate: calc(var(--mx, 0) * --value(integer) * -1px)
+    calc(var(--my, 0) * --value(integer) * -1px);
+  transition: translate 0.8s var(--ease-out-expo);
+}
+
+/* 3D-наклон за курсором (usePointerVars на этом же элементе, perspective на родителе) */
+@utility tilt {
+  transform: rotateX(calc(var(--my, 0) * -12deg)) rotateY(calc(var(--mx, 0) * 12deg));
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+/* Блик, следующий за курсором */
+@utility glare {
+  background: radial-gradient(
+    circle at var(--px, 50%) var(--py, 50%),
+    rgb(255 255 255 / 0.6),
+    transparent 55%
+  );
+}
+
+/* Переливающийся градиентный текст */
+@utility text-shimmer {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary-dark),
+    var(--color-accent-yellow),
+    var(--color-primary)
+  );
+  background-size: 300% auto;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-gradient);
+}
+
+/* Блик, пробегающий по кнопке при наведении */
+@utility btn-shine {
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgb(255 255 255 / 0.35) 50%,
+      transparent 70%
+    );
+    transform: translateX(-110%);
+    transition: transform 0.8s var(--ease-out-expo);
+  }
+  &:hover::after,
+  &:focus-visible::after {
+    transform: translateX(110%);
+  }
+}
+
+/* Заливка кнопки слева направо при наведении (цвет — переменная --btn-fill) */
+@utility btn-fill {
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-fill, currentColor);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  &:hover::before,
+  &:focus-visible::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal='clip'] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

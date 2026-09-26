@@ -27,9 +27,13 @@ export default function PostCard({ post }) {
           src={post.image}
           alt=""
           loading="lazy"
-          className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="size-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-110"
         />
-        <span className="absolute top-4 left-4 flex items-center gap-1 rounded bg-white px-2 py-1 text-xs text-dark">
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-t from-dark/40 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        />
+        <span className="absolute top-4 left-4 flex items-center gap-1 rounded bg-white px-2 py-1 text-xs text-dark transition-[translate] duration-500 ease-spring group-hover:-translate-y-0.5">
           <TypeIcon size={14} />
           {post.type}
         </span>
@@ -59,10 +63,10 @@ export default function PostCard({ post }) {
       <p className="mt-3 text-gray-800">{post.excerpt}</p>
       <Link
         to={url}
-        className="mt-5 flex items-center gap-2 self-start font-bold text-dark transition-colors hover:text-primary"
+        className="group/action mt-5 flex items-center gap-2 self-start font-bold text-dark transition-colors hover:text-primary"
       >
         {action}
-        <HiArrowRight className="text-primary" />
+        <HiArrowRight className="text-primary transition-transform duration-300 ease-out-expo group-hover/action:translate-x-1.5" />
       </Link>
     </article>
   )

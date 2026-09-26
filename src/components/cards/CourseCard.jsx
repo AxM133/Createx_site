@@ -14,7 +14,7 @@ export default function CourseCard({ course, variant = 'vertical', className }) 
     <Link
       to={ROUTES.course(course.id)}
       className={clsx(
-        'group flex overflow-hidden rounded bg-white shadow-card-sm transition-shadow duration-300 hover:shadow-card',
+        'group flex overflow-hidden rounded bg-white shadow-card-sm transition-[box-shadow,translate] duration-500 ease-out-expo hover:-translate-y-1.5 hover:shadow-card',
         horizontal ? 'flex-col sm:flex-row' : 'flex-col',
         className,
       )}
@@ -29,12 +29,14 @@ export default function CourseCard({ course, variant = 'vertical', className }) 
           src={course.author.photo}
           alt={course.author.name}
           loading="lazy"
-          className="absolute inset-0 size-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+          className="absolute inset-0 size-full object-cover object-top transition-transform duration-700 ease-out-expo group-hover:scale-110"
         />
       </div>
       <div className={clsx('flex flex-col', horizontal ? 'justify-center p-6' : 'p-6')}>
         <Badge className="self-start">{course.category}</Badge>
-        <h3 className="mt-3 text-lg leading-snug font-bold">{course.title}</h3>
+        <h3 className="mt-3 text-lg leading-snug font-bold transition-colors group-hover:text-primary">
+          {course.title}
+        </h3>
         <p className="mt-3 text-sm text-gray-700">
           <span className="font-bold text-primary">${course.price}</span>
           <span className="mx-2 text-gray-500">|</span>

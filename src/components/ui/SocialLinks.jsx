@@ -28,7 +28,11 @@ export default function SocialLinks({ networks = Object.keys(ALL), className, si
         const { icon: Icon, label } = ALL[key]
         return (
           <li key={key}>
-            <a href="#" aria-label={label} className="transition-colors hover:text-primary">
+            <a
+              href="#"
+              aria-label={label}
+              className="block transition-[color,translate] duration-300 ease-spring hover:-translate-y-1 hover:text-primary"
+            >
               <Icon size={size} />
             </a>
           </li>

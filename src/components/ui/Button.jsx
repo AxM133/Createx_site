@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 
+// btn-shine / btn-fill — анимации наведения, описаны в src/index.css
 const variants = {
-  primary: 'bg-gradient-primary text-white hover:opacity-90',
-  outline: 'border border-primary text-primary hover:bg-primary hover:text-white',
-  'outline-gray': 'border border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white',
-  white: 'bg-white text-primary hover:bg-gray-300',
+  primary:
+    'btn-shine bg-gradient-primary text-white hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/30',
+  outline:
+    'btn-fill border border-primary text-primary [--btn-fill:var(--color-primary)] hover:text-white',
+  'outline-gray':
+    'btn-fill border border-gray-800 text-gray-800 [--btn-fill:var(--color-gray-800)] hover:text-white',
+  white: 'btn-shine bg-white text-primary hover:-translate-y-0.5 hover:shadow-lg',
 }
 
 const sizes = {
@@ -28,7 +32,7 @@ export default function Button({
   ...props
 }) {
   const classes = clsx(
-    'inline-flex items-center justify-center gap-2 rounded font-bold whitespace-nowrap transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-60',
+    'relative isolate inline-flex items-center justify-center gap-2 overflow-hidden rounded font-bold whitespace-nowrap transition-[color,background-color,border-color,box-shadow,translate,scale] duration-300 ease-out-expo active:scale-[0.97] disabled:pointer-events-none disabled:opacity-60',
     variants[variant],
     sizes[size],
     className,

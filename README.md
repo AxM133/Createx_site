@@ -92,6 +92,24 @@ const { openSignIn, openSignUp, close } = useAuthModal()
 - контейнер: `container-site` (1200px + отступы)
 - шрифт: Lato (подключён в `index.html`)
 
+## Анимации
+
+Без сторонних библиотек: keyframes и утилиты в `src/index.css`, пользователям с `prefers-reduced-motion` анимации отключаются автоматически.
+
+- **Появление при скролле** — оберните блок в `Reveal`:
+  ```jsx
+  import Reveal from '@/components/ui/Reveal'
+  ;<Reveal effect="up" delay={i * 100}>
+    ...
+  </Reveal> // up | down | left | right | zoom | blur | clip
+  ```
+  `SectionHeading` уже появляется сам. Для карточек в сетке добавляйте `className="grid"`, чтобы карточка тянулась на всю высоту.
+- **Разовые анимации**: `animate-fade-up`, `animate-zoom-in`, `animate-clip-in`, `animate-slide-in-left/right`, `animate-pop`; задержка — `[animation-delay:200ms]`. Чтобы проиграть заново при смене данных, меняйте `key` у элемента.
+- **Фоновые**: `animate-float`, `animate-float-slow`, `animate-drift`, `animate-sway`, `animate-ping-ring`, `text-shimmer`.
+- **Кривые**: `ease-out-expo` (основная), `ease-spring` (с «пружинкой»).
+- **За курсором**: `usePointerVars()` на родителе + `parallax-20` / `-parallax-20`, `tilt`, `glare` на детях (пример — `HeroSection`, `CertificateSection`).
+- **Счётчик**: `<CountUp to={1200} />`.
+
 Картинки сейчас временные (Unsplash, через `@/utils/image`). Ассеты из Figma кладите в `src/assets/images/` и импортируйте.
 
 Правила работы с git — в [CONTRIBUTING.md](CONTRIBUTING.md).
