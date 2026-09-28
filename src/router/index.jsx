@@ -13,13 +13,7 @@ import BlogPage from '@/pages/Blog/BlogPage'
 import PostPage from '@/pages/Post/PostPage'
 import NotFoundPage from '@/pages/NotFound/NotFoundPage'
 
-/**
- * Роутинг проекта. Все страницы уже зарегистрированы —
- * разработчикам НЕ нужно менять этот файл, только свои страницы в src/pages/.
- *
- * Sign in / Sign up — это модальные окна (см. src/components/auth),
- * открываются через useAuthModal(), а не через отдельный роут.
- */
+
 export const router = createBrowserRouter([
   {
     element: <MainLayout />,
