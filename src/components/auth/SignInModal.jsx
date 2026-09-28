@@ -1,29 +1,25 @@
-
-import { useState } from "react";
-import { useAuthModal } from "@/hooks/useAuthModal";
+import { useState } from 'react'
+import { useAuthModal } from '@/hooks/useAuthModal'
 
 export default function SignInModal() {
-  const { openSignUp } = useAuthModal();
+  const { openSignUp } = useAuthModal()
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [showPassword, setShowPassword] = useState(false)
+  const [rememberMe, setRememberMe] = useState(true)
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-  };
+    e.preventDefault()
+  }
 
   return (
     <div className="w-full max-w-[400px] overflow-hidden rounded-[4px] bg-white text-[#1e212c] shadow-2xl">
       <div className="px-8 pt-8 pb-6">
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-[28px] font-bold leading-tight text-[#1e212c]">
-            Sign in
-          </h2>
+          <h2 className="text-[28px] leading-tight font-bold text-[#1e212c]">Sign in</h2>
 
           <p className="mx-auto mt-4 max-w-[300px] text-[12px] leading-[18px] text-[#787A80]">
-            Sign in to your account using email and password provided during
-            registration.
+            Sign in to your account using email and password provided during registration.
           </p>
         </div>
 
@@ -42,7 +38,7 @@ export default function SignInModal() {
               type="email"
               placeholder="Your working email"
               required
-              className="h-[44px] w-full rounded-[4px] border border-[#D7DADD] px-3 text-[13px] text-[#424551] outline-none transition focus:border-[#FF3F3A] focus:ring-2 focus:ring-[#FF3F3A]/10"
+              className="h-[44px] w-full rounded-[4px] border border-[#D7DADD] px-3 text-[13px] text-[#424551] transition outline-none focus:border-[#FF3F3A] focus:ring-2 focus:ring-[#FF3F3A]/10"
             />
           </div>
 
@@ -58,16 +54,16 @@ export default function SignInModal() {
             <div className="relative">
               <input
                 id="signin-password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Password"
                 required
-                className="h-[44px] w-full rounded-[4px] border border-[#D7DADD] px-3 pr-11 text-[13px] text-[#424551] outline-none transition focus:border-[#FF3F3A] focus:ring-2 focus:ring-[#FF3F3A]/10"
+                className="h-[44px] w-full rounded-[4px] border border-[#D7DADD] px-3 pr-11 text-[13px] text-[#424551] transition outline-none focus:border-[#FF3F3A] focus:ring-2 focus:ring-[#FF3F3A]/10"
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#787A80] transition hover:text-[#FF3F3A]"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-[#787A80] transition hover:text-[#FF3F3A]"
               >
                 {showPassword ? (
                   <svg
@@ -131,7 +127,7 @@ export default function SignInModal() {
 
         {/* Sign up */}
         <p className="mt-5 text-[12px] text-[#424551]">
-          Don't have an account?{" "}
+          Don't have an account?{' '}
           <button
             type="button"
             onClick={openSignUp}
@@ -144,26 +140,18 @@ export default function SignInModal() {
 
       {/* Social */}
       <div className="border-t border-[#E5E8ED] px-8 py-5">
-        <p className="text-center text-[12px] text-[#787A80]">
-          Or sign in with
-        </p>
+        <p className="text-center text-[12px] text-[#787A80]">Or sign in with</p>
 
         <div className="mt-3 flex items-center justify-center gap-4">
           {/* Facebook */}
-          <button
-            type="button"
-            className="text-[#787A80] transition hover:text-[#1877F2]"
-          >
+          <button type="button" className="text-[#787A80] transition hover:text-[#1877F2]">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14 8h3V4h-3c-3.3 0-5 1.7-5 5v3H6v4h3v8h4v-8h3.2l.8-4H13V9c0-.7.3-1 1-1Z" />
             </svg>
           </button>
 
           {/* Google */}
-          <button
-            type="button"
-            className="text-[#787A80] transition hover:text-[#4285F4]"
-          >
+          <button type="button" className="text-[#787A80] transition hover:text-[#4285F4]">
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -185,20 +173,14 @@ export default function SignInModal() {
           </button>
 
           {/* Twitter */}
-          <button
-            type="button"
-            className="text-[#787A80] transition hover:text-[#1DA1F2]"
-          >
+          <button type="button" className="text-[#787A80] transition hover:text-[#1DA1F2]">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.7.8-2.6 1A4 4 0 0 0 12 8.9c0 .3 0 .6.1.9-3.3-.2-6.2-1.7-8.2-4.1-.4.6-.6 1.3-.6 2 0 1.4.7 2.6 1.7 3.3-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.6 3.3 4-.3.1-.7.1-1 .1-.2 0-.5 0-.7-.1.5 1.7 2 2.9 3.8 2.9A8 8 0 0 1 2 19.3 11.3 11.3 0 0 0 8.1 21c7.3 0 11.3-6 11.3-11.3v-.5c.8-.6 1.4-1.3 1.9-2.1Z" />
             </svg>
           </button>
 
           {/* LinkedIn */}
-          <button
-            type="button"
-            className="text-[#787A80] transition hover:text-[#0A66C2]"
-          >
+          <button type="button" className="text-[#787A80] transition hover:text-[#0A66C2]">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6.5 8.2H2.7V21h3.8V8.2ZM4.6 3A2.2 2.2 0 1 0 4.6 7.4 2.2 2.2 0 0 0 4.6 3ZM21.3 13.7c0-3.9-2.1-5.7-5-5.7-2.3 0-3.3 1.3-3.8 2.1V8.2H8.7V21h3.8v-6.3c0-1.7.3-3.4 2.5-3.4 2.1 0 2.1 2 2.1 3.5V21h4.2v-7.3Z" />
             </svg>
@@ -206,5 +188,5 @@ export default function SignInModal() {
         </div>
       </div>
     </div>
-  );
+  )
 }
