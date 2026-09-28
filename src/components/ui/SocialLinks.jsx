@@ -7,6 +7,7 @@ import {
   FaInstagram,
   FaLinkedinIn,
 } from 'react-icons/fa'
+import { SOCIAL_URLS } from '@/data/contacts'
 
 const ALL = {
   facebook: { icon: FaFacebookF, label: 'Facebook' },
@@ -29,7 +30,9 @@ export default function SocialLinks({ networks = Object.keys(ALL), className, si
         return (
           <li key={key}>
             <a
-              href="#"
+              href={SOCIAL_URLS[key]}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label={label}
               className="block transition-[color,translate] duration-300 ease-spring hover:-translate-y-1 hover:text-primary"
             >

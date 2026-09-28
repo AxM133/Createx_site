@@ -1,15 +1,36 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAuthModal } from '@/hooks/useAuthModal'
 
 export default function SignInModal() {
-  const { openSignUp } = useAuthModal()
+  const { openSignUp, close } = useAuthModal()
+  const formRef = useRef(null)
+  const [notice, setNotice] = useState(null)
 
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
 
+  // Бэкенда пока нет — показываем результат и закрываем окно
   const handleSubmit = (e) => {
     e.preventDefault()
+    setNotice({ type: 'success', text: 'Welcome back! You are signed in.' })
+    setTimeout(close, 1200)
   }
+
+  const handleForgot = () => {
+    const email = formRef.current.elements['signin-email']
+    if (!email.value || !email.validity.valid) {
+      setNotice({
+        type: 'error',
+        text: 'Enter your email above and we will send you a reset link.',
+      })
+      email.focus()
+      return
+    }
+    setNotice({ type: 'success', text: `We have sent a password reset link to ${email.value}.` })
+  }
+
+  const socialSignIn = (network) =>
+    setNotice({ type: 'error', text: `Sign in with ${network} will be available soon.` })
 
   return (
     // Фон, тень и скругление даёт Modal — здесь только содержимое на всю ширину окна
@@ -26,7 +47,7 @@ export default function SignInModal() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-7">
+        <form ref={formRef} onSubmit={handleSubmit} className="mt-7">
           {/* Email */}
           <div>
             <label
@@ -113,6 +134,7 @@ export default function SignInModal() {
 
             <button
               type="button"
+              onClick={handleForgot}
               className="text-[12px] font-medium text-[#FF3F3A] hover:underline"
             >
               Forgot password?
@@ -126,6 +148,19 @@ export default function SignInModal() {
           >
             Sign in
           </button>
+
+          {notice && (
+            <p
+              role="status"
+              className={`mt-4 animate-fade-up rounded-[4px] px-3 py-2 text-center text-[12px] ${
+                notice.type === 'error'
+                  ? 'bg-[#FF3F3A]/10 text-[#FF3F3A]'
+                  : 'bg-[#03CEA4]/10 text-[#03a887]'
+              }`}
+            >
+              {notice.text}
+            </p>
+          )}
         </form>
 
         {/* Sign up */}
@@ -147,14 +182,24 @@ export default function SignInModal() {
 
         <div className="mt-3 flex items-center justify-center gap-4">
           {/* Facebook */}
-          <button type="button" className="text-[#787A80] transition hover:text-[#1877F2]">
+          <button
+            type="button"
+            aria-label="Sign in with Facebook"
+            onClick={() => socialSignIn('Facebook')}
+            className="text-[#787A80] transition hover:text-[#1877F2]"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14 8h3V4h-3c-3.3 0-5 1.7-5 5v3H6v4h3v8h4v-8h3.2l.8-4H13V9c0-.7.3-1 1-1Z" />
             </svg>
           </button>
 
           {/* Google */}
-          <button type="button" className="text-[#787A80] transition hover:text-[#4285F4]">
+          <button
+            type="button"
+            aria-label="Sign in with Google"
+            onClick={() => socialSignIn('Google')}
+            className="text-[#787A80] transition hover:text-[#4285F4]"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -176,14 +221,24 @@ export default function SignInModal() {
           </button>
 
           {/* Twitter */}
-          <button type="button" className="text-[#787A80] transition hover:text-[#1DA1F2]">
+          <button
+            type="button"
+            aria-label="Sign in with Twitter"
+            onClick={() => socialSignIn('Twitter')}
+            className="text-[#787A80] transition hover:text-[#1DA1F2]"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.7.8-2.6 1A4 4 0 0 0 12 8.9c0 .3 0 .6.1.9-3.3-.2-6.2-1.7-8.2-4.1-.4.6-.6 1.3-.6 2 0 1.4.7 2.6 1.7 3.3-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.6 3.3 4-.3.1-.7.1-1 .1-.2 0-.5 0-.7-.1.5 1.7 2 2.9 3.8 2.9A8 8 0 0 1 2 19.3 11.3 11.3 0 0 0 8.1 21c7.3 0 11.3-6 11.3-11.3v-.5c.8-.6 1.4-1.3 1.9-2.1Z" />
             </svg>
           </button>
 
           {/* LinkedIn */}
-          <button type="button" className="text-[#787A80] transition hover:text-[#0A66C2]">
+          <button
+            type="button"
+            aria-label="Sign in with LinkedIn"
+            onClick={() => socialSignIn('LinkedIn')}
+            className="text-[#787A80] transition hover:text-[#0A66C2]"
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6.5 8.2H2.7V21h3.8V8.2ZM4.6 3A2.2 2.2 0 1 0 4.6 7.4 2.2 2.2 0 0 0 4.6 3ZM21.3 13.7c0-3.9-2.1-5.7-5-5.7-2.3 0-3.3 1.3-3.8 2.1V8.2H8.7V21h3.8v-6.3c0-1.7.3-3.4 2.5-3.4 2.1 0 2.1 2 2.1 3.5V21h4.2v-7.3Z" />
             </svg>

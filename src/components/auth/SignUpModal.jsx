@@ -2,15 +2,33 @@ import { useState } from 'react'
 import { useAuthModal } from '@/hooks/useAuthModal'
 
 export default function SignUpModal() {
-  const { openSignIn } = useAuthModal()
+  const { openSignIn, close } = useAuthModal()
+  const [notice, setNotice] = useState(null)
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(true)
 
+  // Бэкенда пока нет — проверяем пароли, показываем результат и закрываем окно
   const handleSubmit = (e) => {
     e.preventDefault()
+    const { elements } = e.currentTarget
+    const password = elements['signup-password'].value
+    if (password.length < 6) {
+      setNotice({ type: 'error', text: 'Password must be at least 6 characters.' })
+      return
+    }
+    if (password !== elements['signup-confirm-password'].value) {
+      setNotice({ type: 'error', text: 'Passwords do not match.' })
+      return
+    }
+    const name = elements['signup-name'].value.trim().split(' ')[0]
+    setNotice({ type: 'success', text: `Welcome to Createx, ${name}! Your account is created.` })
+    setTimeout(close, 1500)
   }
+
+  const socialSignIn = (network) =>
+    setNotice({ type: 'error', text: `Sign up with ${network} will be available soon.` })
 
   return (
     // Фон, тень и скругление даёт Modal — здесь только содержимое на всю ширину окна
@@ -188,6 +206,19 @@ export default function SignUpModal() {
           >
             Sign up
           </button>
+
+          {notice && (
+            <p
+              role="status"
+              className={`mt-4 animate-fade-up rounded-[4px] px-3 py-2 text-center text-[12px] ${
+                notice.type === 'error'
+                  ? 'bg-[#FF3F3A]/10 text-[#FF3F3A]'
+                  : 'bg-[#03CEA4]/10 text-[#03a887]'
+              }`}
+            >
+              {notice.text}
+            </p>
+          )}
         </form>
 
         {/* Sign in */}
@@ -208,13 +239,23 @@ export default function SignUpModal() {
         <p className="text-center text-[11px] text-[#787A80]">Or sign in with</p>
 
         <div className="mt-3 flex items-center justify-center gap-4">
-          <button type="button" className="text-[#787A80] transition hover:text-[#1877F2]">
+          <button
+            type="button"
+            aria-label="Sign up with Facebook"
+            onClick={() => socialSignIn('Facebook')}
+            className="text-[#787A80] transition hover:text-[#1877F2]"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14 8h3V4h-3c-3.3 0-5 1.7-5 5v3H6v4h3v8h4v-8h3.2l.8-4H13V9c0-.7.3-1 1-1Z" />
             </svg>
           </button>
 
-          <button type="button" className="text-[#787A80] transition hover:text-[#4285F4]">
+          <button
+            type="button"
+            aria-label="Sign up with Google"
+            onClick={() => socialSignIn('Google')}
+            className="text-[#787A80] transition hover:text-[#4285F4]"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
@@ -235,13 +276,23 @@ export default function SignUpModal() {
             </svg>
           </button>
 
-          <button type="button" className="text-[#787A80] transition hover:text-[#1DA1F2]">
+          <button
+            type="button"
+            aria-label="Sign up with Twitter"
+            onClick={() => socialSignIn('Twitter')}
+            className="text-[#787A80] transition hover:text-[#1DA1F2]"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.7.8-2.6 1A4 4 0 0 0 12 8.9c0 .3 0 .6.1.9-3.3-.2-6.2-1.7-8.2-4.1-.4.6-.6 1.3-.6 2 0 1.4.7 2.6 1.7 3.3-.6 0-1.2-.2-1.7-.5v.1c0 2 1.4 3.6 3.3 4-.3.1-.7.1-1 .1-.2 0-.5 0-.7-.1.5 1.7 2 2.9 3.8 2.9A8 8 0 0 1 2 19.3 11.3 11.3 0 0 0 8.1 21c7.3 0 11.3-6 11.3-11.3v-.5c.8-.6 1.4-1.3 1.9-2.1Z" />
             </svg>
           </button>
 
-          <button type="button" className="text-[#787A80] transition hover:text-[#0A66C2]">
+          <button
+            type="button"
+            aria-label="Sign up with LinkedIn"
+            onClick={() => socialSignIn('LinkedIn')}
+            className="text-[#787A80] transition hover:text-[#0A66C2]"
+          >
             <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6.5 8.2H2.7V21h3.8V8.2ZM4.6 3A2.2 2.2 0 1 0 4.6 7.4 2.2 2.2 0 0 0 4.6 3ZM21.3 13.7c0-3.9-2.1-5.7-5-5.7-2.3 0-3.3 1.3-3.8 2.1V8.2H8.7V21h3.8v-6.3c0-1.7.3-3.4 2.5-3.4 2.1 0 2.1 2 2.1 3.5V21h4.2v-7.3Z" />
             </svg>

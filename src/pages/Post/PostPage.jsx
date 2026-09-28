@@ -3,7 +3,11 @@ import { Link, useParams } from 'react-router-dom';
 import Reveal from '../../components/ui/Reveal';
 import SmartImage from '../../components/ui/SmartImage';
 import { IMG, LINKS } from '../../data/shukrulloImages';
-import { POSTS } from '../../data/shukrulloData';
+import { POSTS, POST_ACTION } from '../../data/posts';
+import { SOCIAL_URLS } from '../../data/contacts';
+import NotFoundPage from '../NotFound/NotFoundPage';
+import Button from '../../components/ui/Button';
+import ArticlesNewsletterSection from '../../components/sections/ArticlesNewsletterSection';
 import s from './PostPage.module.css';
   
 const TAGS = ['#marketing', '#recruiting', '#coding', '#learning', '#HR', '#self-development'];
@@ -13,6 +17,9 @@ const LIST = [
   'Consequat feugiat habitant gravida quisque elit bibendum id adipiscing.',
   'Etiam duis lobortis in fames ultrices commodo nibh.',
 ];
+/** Тег ведёт в блог с поиском по нему */
+const blogSearch = (tag) => `${LINKS.blog}?search=${encodeURIComponent(tag.slice(1).replace('-', ' '))}`;
+
 const SHARE = [
   { icon: IMG.ICON_FACEBOOK, name: 'Facebook', url: (u, t) => `https://www.facebook.com/sharer/sharer.php?u=${u}` },
   { icon: IMG.ICON_TWITTER, name: 'Twitter', url: (u, t) => `https://twitter.com/intent/tweet?url=${u}&text=${t}` },
@@ -46,7 +53,6 @@ function Share({ title }) {
 
 function Sidebar() {
   const [query, setQuery] = useState('');
-  const [tag, setTag] = useState('#coding');
   const trending = useMemo(
     () => POSTS.filter((p) => p.title.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 3),
     [query],
@@ -66,8 +72,12 @@ function Sidebar() {
             <b>Kristin Watson</b>
             <small>Curator of Marketing Course</small>
             <div className={s.authorSocial}>
-              {[IMG.ICON_INSTAGRAM, IMG.ICON_TWITTER, IMG.ICON_LINKEDIN].map((ic) => (
-                <a key={ic.src} href="#" onClick={(e) => e.preventDefault()}><SmartImage image={ic} icon alt="" /></a>
+              {[
+                [IMG.ICON_INSTAGRAM, 'instagram'],
+                [IMG.ICON_TWITTER, 'twitter'],
+                [IMG.ICON_LINKEDIN, 'linkedin'],
+              ].map(([ic, net]) => (
+                <a key={net} href={SOCIAL_URLS[net]} target="_blank" rel="noopener noreferrer" aria-label={net}><SmartImage image={ic} icon alt="" /></a>
               ))}
             </div>
           </div>
@@ -96,7 +106,7 @@ function Sidebar() {
         <h4>Tags</h4>
         <div className={s.tags}>
           {TAGS.map((t) => (
-            <button key={t} onClick={() => setTag(t)} className={`${s.tag} ${tag === t ? s.tagOn : ''}`}>{t}</button>
+            <Link key={t} to={blogSearch(t)} className={s.tag}>{t}</Link>
           ))}
         </div>
       </Reveal>
@@ -130,11 +140,15 @@ function Related({ currentId }) {
               </Link>
               <div className={s.meta}><b>{p.category}</b><span>|</span><span>{p.date}</span></div>
               <h3><Link to={LINKS.post(p.id)}>{p.title}</Link></h3>
-              <p>{p.text}</p>
-              <Link to={LINKS.post(p.id)} className={s.readMore}>{p.action} <SmartImage image={IMG.ICON_ARROW} icon alt="" /></Link>
+              <p>{p.excerpt}</p>
+              <Link to={LINKS.post(p.id)} className={s.readMore}>{POST_ACTION[p.type]} <SmartImage image={IMG.ICON_ARROW} icon alt="" /></Link>
             </article>
           ))}
         </div>
+        <Reveal className="mt-16 flex flex-wrap items-center justify-center gap-6 text-center">
+          <p className="text-2xl font-black text-dark md:text-[28px]">Do you want more articles, podcasts and videos?</p>
+          <Button to={LINKS.blog}>Go to blog</Button>
+        </Reveal>
       </div>
     </section>
   );
@@ -143,7 +157,6 @@ function Related({ currentId }) {
 export default function PostPage() {
   const { postId } = useParams();
   const post = POSTS.find((p) => String(p.id) === String(postId));
-  const title = post?.title ?? 'HR statistics: job search, interviews, hiring and recruiting';
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -158,19 +171,22 @@ export default function PostPage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [postId]);
 
+  if (!post) return <NotFoundPage />;
+  const { title } = post;
+
   return (
-    <main className={s.page}>
+    <div className={s.page}>
       <div className={s.progress} style={{ transform: `scaleX(${progress / 100})` }} />
       <div className={`${s.container} ${s.layout}`}>
         <article className={s.article}>
           <Reveal className={s.top}>
-            <span className={s.type2}>{post?.type ?? 'Article'}</span><span className={s.sep} />
-            <Link to={LINKS.blog} className={s.cat}>{post?.category ?? 'HR & Recruiting'}</Link>
+            <span className={s.type2}>{post.type}</span><span className={s.sep} />
+            <Link to={`${LINKS.blog}?category=${encodeURIComponent(post.category)}`} className={s.cat}>{post.category}</Link>
           </Reveal>
           <Reveal as="h1" delay={80}>{title}</Reveal>
           <Reveal delay={160} className={s.metaRow}>
-            <span><SmartImage image={IMG.ICON_CALENDAR_SMALL} icon alt="" /> {post?.date ?? 'August 3, 2020'}</span>
-            <span><SmartImage image={IMG.ICON_CLOCK} icon alt="" /> {post?.time || '4 min'} read</span>
+            <span><SmartImage image={IMG.ICON_CALENDAR_SMALL} icon alt="" /> {post.date}</span>
+            <span><SmartImage image={IMG.ICON_CLOCK} icon alt="" /> {post.duration} read</span>
             <Share title={title} />
           </Reveal>
 
@@ -207,7 +223,7 @@ export default function PostPage() {
           <div className={s.footRow}>
             <div className={s.tags}>
               <b>Tags:</b>
-              {['#learning', '#HR', '#self-development'].map((t) => <span key={t} className={s.tagStatic}>{t}</span>)}
+              {['#learning', '#HR', '#self-development'].map((t) => <Link key={t} to={blogSearch(t)} className={s.tagStatic}>{t}</Link>)}
             </div>
             <Share title={title} />
           </div>
@@ -216,7 +232,8 @@ export default function PostPage() {
         <Sidebar />
       </div>
 
+      <ArticlesNewsletterSection />
       <Related currentId={postId} />
-    </main>
+    </div>
   );
 }

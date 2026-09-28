@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Reveal from '../../components/ui/Reveal';
 import SmartImage from '../../components/ui/SmartImage';
 import { IMG } from '../../data/shukrulloImages';
+import { SOCIAL_URLS } from '../../data/contacts';
 import s from './ContactsPage.module.css';
   
 const INFO = [
@@ -9,7 +10,14 @@ const INFO = [
   { icon: IMG.ICON_PHONE, label: 'Call us:', value: '(405) 555-0128', href: 'tel:+14055550128' },
   { icon: IMG.ICON_PIN, label: 'Address:', value: '2464 Royal Ln. Mesa, New Jersey 45463, USA', href: '#map' },
 ];
-const SOCIALS = [IMG.ICON_FACEBOOK, IMG.ICON_TWITTER, IMG.ICON_YOUTUBE, IMG.ICON_TELEGRAM, IMG.ICON_INSTAGRAM, IMG.ICON_LINKEDIN];
+const SOCIALS = [
+  [IMG.ICON_FACEBOOK, 'facebook'],
+  [IMG.ICON_TWITTER, 'twitter'],
+  [IMG.ICON_YOUTUBE, 'youtube'],
+  [IMG.ICON_TELEGRAM, 'telegram'],
+  [IMG.ICON_INSTAGRAM, 'instagram'],
+  [IMG.ICON_LINKEDIN, 'linkedin'],
+];
 
 const EMPTY = { first: '', last: '', email: '', phone: '', message: '', agree: true };
 
@@ -56,7 +64,7 @@ export default function ContactsPage() {
   };
 
   return (
-    <main className={s.page}>
+    <div className={s.page}>
       <section className={`${s.container} ${s.info}`}>
         <div>
           <Reveal as="span" className={s.eyebrow}>Contact info</Reveal>
@@ -75,8 +83,8 @@ export default function ContactsPage() {
           <Reveal delay={600} className={s.follow}>
             <b>Follow us:</b>
             <div>
-              {SOCIALS.map((ic) => (
-                <a key={ic.src} href="#" onClick={(e) => e.preventDefault()} className={s.social}>
+              {SOCIALS.map(([ic, net]) => (
+                <a key={net} href={SOCIAL_URLS[net]} target="_blank" rel="noopener noreferrer" aria-label={net} className={s.social}>
                   <SmartImage image={ic} icon alt="" />
                 </a>
               ))}
@@ -143,6 +151,6 @@ export default function ContactsPage() {
           )}
         </Reveal>
       </section>
-    </main>
+    </div>
   );
 }

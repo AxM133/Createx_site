@@ -20,7 +20,7 @@ export const courses = [
   {
     id: 3,
     title: 'HR Management and Analytics',
-    category: 'HR & Recruting',
+    category: 'HR & Recruiting',
     price: 200,
     author: byName('Leslie Alexander Li'),
   },
@@ -55,7 +55,7 @@ export const courses = [
   {
     id: 8,
     title: 'Human Resources – Selection and Recruitment',
-    category: 'HR & Recruting',
+    category: 'HR & Recruiting',
     price: 150,
     author: byName('Kathryn Murphy'),
   },

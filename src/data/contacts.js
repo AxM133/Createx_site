@@ -7,7 +7,21 @@ export const CONTACTS = {
 export const COURSE_CATEGORIES = [
   'Marketing',
   'Management',
-  'HR & Recruting',
+  'HR & Recruiting',
   'Design',
   'Development',
 ]
+
+/** Ссылки на соцсети школы — SocialLinks, Contacts, About, Post */
+export const SOCIAL_URLS = {
+  facebook: 'https://www.facebook.com/',
+  twitter: 'https://twitter.com/',
+  youtube: 'https://www.youtube.com/',
+  telegram: 'https://t.me/',
+  instagram: 'https://www.instagram.com/',
+  linkedin: 'https://www.linkedin.com/',
+}
+
+/** Промо-видео для «Play showreel» (главная) и «Watch Video» (About Us). CC0, MDN */
+export const PROMO_VIDEO =
+  'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4'

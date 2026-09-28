@@ -52,10 +52,3 @@ export const TESTIMONIALS = [
 
 export const PARTNERS_ROW_1 = [IMG.PARTNER_1, IMG.PARTNER_2, IMG.PARTNER_3, IMG.PARTNER_4, IMG.PARTNER_5, IMG.PARTNER_6];
 export const PARTNERS_ROW_2 = [IMG.PARTNER_7, IMG.PARTNER_8, IMG.PARTNER_9, IMG.PARTNER_10, IMG.PARTNER_11, IMG.PARTNER_12];
-
-export const POSTS = [
-  { id: 1, type: 'Podcast', action: 'Listen', category: 'Marketing', date: 'September 4, 2020', time: '36 min', bg: '#a5d2f7', cover: IMG.POST_1, title: 'What is traffic arbitrage and does it really make money?', text: 'Pharetra, ullamcorper iaculis viverra parturient sed id sed. Convallis proin dignissim lacus, purus gravida...' },
-  { id: 2, type: 'Video', action: 'Watch', category: 'Management', date: 'August 25, 2020', time: '45 min', bg: '#c9f0e2', cover: IMG.POST_2, title: 'What to do and who to talk to if you want to get feedback on the product', text: 'Neque a, senectus consectetur odio in aliquet nec eu. Ultricies ac nibh urna urna sagittis faucibus...' },
-  { id: 3, type: 'Article', action: 'Read', category: 'Design', date: 'August 8, 2020', time: '', bg: '#fff5a8', cover: IMG.POST_3, title: 'Should you choose a creative profession if you are attracted to creativity?', text: 'Curabitur nisl tincidunt eros venenatis vestibulum ac placerat. Tortor, viverra sed vulputate ultrices...' },
-  { id: 4, type: 'Article', action: 'Read', category: 'HR & Recruiting', date: 'July 15, 2020', time: '8 min', bg: '#fddde6', cover: IMG.POST_4, title: 'Startup: how to build a team that will live longer than a year', text: 'Vitae congue eu consequat ac felis placerat vestibulum lectus mauris ultrices cursus sit amet...' },
-];

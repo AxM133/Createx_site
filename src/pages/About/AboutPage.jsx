@@ -6,8 +6,10 @@ import SmartImage from '../../components/ui/SmartImage';
 import { IMG, LINKS } from '../../data/shukrulloImages';
 import {
   STATS, VALUES, DIRECTIONS, DIRECTION_TEXT, STEPS, TEAM,
-  TESTIMONIALS, PARTNERS_ROW_1, PARTNERS_ROW_2, POSTS,
+  TESTIMONIALS, PARTNERS_ROW_1, PARTNERS_ROW_2,
 } from '../../data/shukrulloData';
+import { PROMO_VIDEO, SOCIAL_URLS } from '../../data/contacts';
+import { POSTS, POST_ACTION } from '../../data/posts';
 import s from './AboutPage.module.css';
 
 function Heading({ eyebrow, title, align = 'center' }) {
@@ -32,10 +34,7 @@ function VideoModal({ open, onClose }) {
     <div className={s.overlay} onClick={onClose} role="dialog" aria-modal="true">
       <div className={s.videoBox} onClick={(e) => e.stopPropagation()}>
         <button className={s.close} onClick={onClose} aria-label="Close">×</button>
-        <video controls autoPlay className={s.video} src="/src/assets/videos/shukrullo/about-promo.mp4">
-          
-        </video>
-        <p className={s.videoHint}></p>
+        <video controls autoPlay playsInline className={s.video} src={PROMO_VIDEO} />
       </div>
     </div>
   );
@@ -129,7 +128,7 @@ function Directions() {
               <div className={s.dirBody}>
                 <span className={s.badge} style={{ background: d.color }}>{d.title}</span>
                 <p>{DIRECTION_TEXT}</p>
-                <Link to={LINKS.courses} className={s.arrowLink}>
+                <Link to={`${LINKS.courses}?category=${encodeURIComponent(d.title)}`} className={s.arrowLink}>
                   Check courses <SmartImage image={IMG.ICON_ARROW} icon alt="" />
                 </Link>
               </div>
@@ -177,8 +176,12 @@ function Team() {
               <div className={s.memberPhoto}>
                 <SmartImage image={m.photo} alt={m.name} />
                 <div className={s.memberSocial}>
-                  {[IMG.ICON_FACEBOOK, IMG.ICON_INSTAGRAM, IMG.ICON_LINKEDIN].map((ic) => (
-                    <a key={ic.src} href="#" onClick={(e) => e.preventDefault()}><SmartImage image={ic} icon alt="" /></a>
+                  {[
+                    [IMG.ICON_FACEBOOK, 'facebook'],
+                    [IMG.ICON_INSTAGRAM, 'instagram'],
+                    [IMG.ICON_LINKEDIN, 'linkedin'],
+                  ].map(([ic, net]) => (
+                    <a key={net} href={SOCIAL_URLS[net]} target="_blank" rel="noopener noreferrer" aria-label={net}><SmartImage image={ic} icon alt="" /></a>
                   ))}
                 </div>
               </div>
@@ -291,11 +294,11 @@ function LatestPosts() {
               <div className={s.meta}>
                 <b>{p.category}</b><span>|</span>
                 <span className={s.metaItem}><SmartImage image={IMG.ICON_CALENDAR_SMALL} icon alt="" />{p.date}</span>
-                {p.time && <><span>|</span><span className={s.metaItem}><SmartImage image={IMG.ICON_CLOCK} icon alt="" />{p.time}</span></>}
+                {p.duration && <><span>|</span><span className={s.metaItem}><SmartImage image={IMG.ICON_CLOCK} icon alt="" />{p.duration}</span></>}
               </div>
               <h3><Link to={LINKS.post(p.id)}>{p.title}</Link></h3>
-              <p>{p.text}</p>
-              <Link to={LINKS.post(p.id)} className={s.arrowLink}>{p.action} <SmartImage image={IMG.ICON_ARROW} icon alt="" /></Link>
+              <p>{p.excerpt}</p>
+              <Link to={LINKS.post(p.id)} className={s.arrowLink}>{POST_ACTION[p.type]} <SmartImage image={IMG.ICON_ARROW} icon alt="" /></Link>
             </Reveal>
           ))}
         </div>
@@ -332,7 +335,7 @@ function SubscribeBlock() {
 
 export default function AboutPage() {
   return (
-    <main className={s.page}>
+    <div className={s.page}>
       <Hero />
       <VideoStats />
       <Values />
@@ -343,6 +346,6 @@ export default function AboutPage() {
       <Partners />
       <LatestPosts />
       <SubscribeBlock />
-    </main>
+    </div>
   );
 }

@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { HiPlay } from 'react-icons/hi2'
 import Button from '@/components/ui/Button'
 import CountUp from '@/components/ui/CountUp'
 import Reveal from '@/components/ui/Reveal'
+import VideoModal from '@/components/ui/VideoModal'
 import { usePointerVars } from '@/hooks/usePointerVars'
 import { ROUTES } from '@/router/paths'
 import { unsplash } from '@/utils/image'
@@ -18,6 +20,7 @@ const STATS = [
 export default function HeroSection() {
   // Слои с parallax-* сдвигаются за курсором
   const pointer = usePointerVars()
+  const [videoOpen, setVideoOpen] = useState(false)
 
   return (
     <section {...pointer} className="relative overflow-hidden bg-gradient-pink pt-20 lg:pt-[92px]">
@@ -35,6 +38,7 @@ export default function HeroSection() {
         <div>
           <button
             type="button"
+            onClick={() => setVideoOpen(true)}
             className="group flex animate-fade-up items-center gap-4 font-bold text-dark"
           >
             <span className="relative grid size-14 place-items-center rounded-full bg-primary text-white ring-8 ring-primary/20 transition-transform duration-500 ease-spring group-hover:scale-110">
@@ -131,6 +135,7 @@ export default function HeroSection() {
           ))}
         </ul>
       </div>
+      <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
     </section>
   )
 }

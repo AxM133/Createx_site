@@ -13,7 +13,12 @@ const FIELDS = [
  * Форма записи на курс.
  * layout="row" — баннер со скидкой (поля в строку), "column" — «Register for the course».
  */
-export default function JoinCourseForm({ layout = 'column', className }) {
+export default function JoinCourseForm({
+  layout = 'column',
+  submitLabel = 'Join the course',
+  note,
+  className,
+}) {
   const id = useId()
   const [sent, setSent] = useState(false)
   const row = layout === 'row'
@@ -36,9 +41,10 @@ export default function JoinCourseForm({ layout = 'column', className }) {
           <Input key={field.name} id={`${id}-${field.name}`} required {...field} />
         ))}
         <Button type="submit" className={clsx(row ? 'md:col-span-2 lg:col-span-1' : 'mt-2 w-full')}>
-          Join the course
+          {submitLabel}
         </Button>
       </div>
+      {note && <p className="mt-4 text-sm text-gray-700">{note}</p>}
       {sent && (
         <p role="status" className="mt-4 animate-fade-up text-sm text-gray-800">
           Thank you! We will contact you shortly.

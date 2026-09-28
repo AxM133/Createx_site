@@ -1,20 +1,22 @@
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { HiArrowLeft, HiArrowRight, HiMagnifyingGlass } from 'react-icons/hi2'
 import PostCard from '@/components/cards/PostCard'
-import Button from '@/components/ui/Button'
+import ArticlesNewsletterSection from '@/components/sections/ArticlesNewsletterSection'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { posts } from '@/data/posts'
 
 const tabs = ['All', 'Articles', 'Videos', 'Podcasts']
 const typeByTab = { Articles: 'Article', Videos: 'Video', Podcasts: 'Podcast' }
-const pageSize = 3
+const pageSize = 6
 
 export default function BlogPage() {
+  // ?category= и ?search= приходят со страницы поста (категория, теги)
+  const [searchParams] = useSearchParams()
   const [activeTab, setActiveTab] = useState('All')
-  const [category, setCategory] = useState('All categories')
-  const [search, setSearch] = useState('')
+  const [category, setCategory] = useState(searchParams.get('category') ?? 'All categories')
+  const [search, setSearch] = useState(searchParams.get('search') ?? '')
   const [page, setPage] = useState(1)
-  const [subscribed, setSubscribed] = useState(false)
 
   const categories = [...new Set(posts.map((post) => post.category))]
   const filteredPosts = useMemo(() => {
@@ -25,7 +27,9 @@ export default function BlogPage() {
       const matchesCategory = category === 'All categories' || post.category === category
       const matchesSearch =
         !normalizedSearch ||
-        `${post.title} ${post.excerpt} ${post.category}`.toLowerCase().includes(normalizedSearch)
+        `${post.title} ${post.excerpt} ${post.category} ${post.tags.join(' ')}`
+          .toLowerCase()
+          .includes(normalizedSearch)
 
       return matchesType && matchesCategory && matchesSearch
     })
@@ -38,15 +42,9 @@ export default function BlogPage() {
     setPage(1)
   }
 
-  const handleSubscribe = (event) => {
-    event.preventDefault()
-    setSubscribed(true)
-    event.currentTarget.reset()
-  }
-
   return (
     <>
-      <main className="container-site py-16 lg:py-24">
+      <section className="container-site py-16 lg:py-24">
         <SectionHeading eyebrow="Our blog" title="Createx School Journal" />
 
         <div className="mt-10 flex flex-col gap-6 border-b border-gray-400 pb-6 lg:flex-row lg:items-center lg:justify-between">
@@ -145,42 +143,9 @@ export default function BlogPage() {
             </button>
           </nav>
         )}
-      </main>
-
-      <section className="bg-gray-300 py-14 lg:py-20">
-        <div className="container-site grid items-center gap-8 md:grid-cols-[1fr_1.2fr] lg:gap-16">
-          <div
-            aria-hidden="true"
-            className="hidden aspect-[4/3] rounded bg-gradient-to-br from-marketing/20 via-white to-management/20 md:block"
-          />
-          <div>
-            <h2 className="max-w-lg text-2xl leading-tight font-black md:text-3xl">
-              Want to get the best articles weekly? Subscribe to our newsletter!
-            </h2>
-            <form onSubmit={handleSubscribe} className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <label className="flex-1">
-                <span className="sr-only">Your email</span>
-                <input
-                  type="email"
-                  required
-                  placeholder="Your working email"
-                  className="h-11 w-full rounded border border-gray-500 bg-white px-4 text-sm outline-none placeholder:text-gray-700 focus:border-primary"
-                />
-              </label>
-              <Button type="submit">Subscribe</Button>
-            </form>
-            <label className="mt-4 flex items-start gap-2 text-xs text-gray-800">
-              <input type="checkbox" required className="mt-0.5 accent-primary" />I agree to receive
-              communications from Createx Online School
-            </label>
-            {subscribed && (
-              <p className="mt-3 text-sm text-gray-800" role="status">
-                Thank you! You are subscribed.
-              </p>
-            )}
-          </div>
-        </div>
       </section>
+
+      <ArticlesNewsletterSection />
     </>
   )
 }

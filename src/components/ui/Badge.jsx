@@ -3,7 +3,7 @@ import clsx from 'clsx'
 const categoryColors = {
   Marketing: 'bg-marketing',
   Management: 'bg-management',
-  'HR & Recruting': 'bg-hr',
+  'HR & Recruiting': 'bg-hr',
   Design: 'bg-design',
   Development: 'bg-development',
 }

@@ -12,14 +12,11 @@ import LearningProcessSection from './sections/LearningProcessSection'
 import ProgramSection from './sections/ProgramSection'
 import RegisterSection from './sections/RegisterSection'
 
-// Курс из макета — показывается на /courses (без id)
-const DEFAULT_COURSE_ID = '9'
-
 /**
  * Single Course — страница курса
  */
 export default function CoursePage() {
-  const { courseId = DEFAULT_COURSE_ID } = useParams()
+  const { courseId } = useParams()
   const course = courses.find((c) => String(c.id) === courseId)
 
   if (!course) return <NotFoundPage />

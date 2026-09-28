@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import clsx from 'clsx'
 import { createPortal } from 'react-dom'
 import { HiXMark } from 'react-icons/hi2'
 
@@ -7,7 +8,13 @@ import { HiXMark } from 'react-icons/hi2'
  * <Modal open={open} onClose={close}>...</Modal>
  * Открывается и закрывается с анимацией: после open=false модалка остаётся в DOM, пока играет выход.
  */
-export default function Modal({ open, onClose, children, labelledBy }) {
+export default function Modal({
+  open,
+  onClose,
+  children,
+  labelledBy,
+  className = 'max-w-[486px]',
+}) {
   const [rendered, setRendered] = useState(open)
   if (open && !rendered) setRendered(true)
 
@@ -36,7 +43,10 @@ export default function Modal({ open, onClose, children, labelledBy }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={labelledBy}
-        className="relative w-full max-w-[486px] animate-modal-in rounded bg-white shadow-card group-data-[state=closed]/modal:animate-modal-out"
+        className={clsx(
+          'relative w-full animate-modal-in rounded bg-white shadow-card group-data-[state=closed]/modal:animate-modal-out',
+          className,
+        )}
       >
         <button
           type="button"

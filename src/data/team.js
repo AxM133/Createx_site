@@ -28,7 +28,7 @@ export const team = [
   {
     id: 5,
     name: 'Leslie Alexander Li',
-    role: 'Curator of HR & Recruting Course',
+    role: 'Curator of HR & Recruiting Course',
     photo: unsplash('1506794778202-cad84cf45f1d', 400),
   },
   {

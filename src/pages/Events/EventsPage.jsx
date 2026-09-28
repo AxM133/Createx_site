@@ -5,17 +5,13 @@ import {
   HiChevronDown,
   HiMagnifyingGlass,
   HiOutlineBars3,
-  HiOutlineCalendarDays,
   HiOutlineSquares2X2,
-  HiOutlineClock,
 } from 'react-icons/hi2'
-import { Link } from 'react-router-dom'
+import EventCard from '@/components/cards/EventCard'
 import EventRow from '@/components/cards/EventRow'
 import SubscribeSection from '@/components/sections/SubscribeSection'
-import Button from '@/components/ui/Button'
 import SectionHeading from '@/components/ui/SectionHeading'
 import { events } from '@/data/events'
-import { ROUTES } from '@/router/paths'
 
 const pageSizes = [3, 6, 9]
 const monthNumbers = {
@@ -46,7 +42,10 @@ function FilterSelect({ label, className, children, ...props }) {
     <label className="flex items-center gap-3 text-sm font-bold whitespace-nowrap text-dark">
       {label}
       <span className={`relative block ${className}`}>
-        <select {...props} className={`${controlClass} cursor-pointer appearance-none pr-10 pl-4 font-normal`}>
+        <select
+          {...props}
+          className={`${controlClass} cursor-pointer appearance-none pr-10 pl-4 font-normal`}
+        >
           {children}
         </select>
         <HiChevronDown
@@ -61,8 +60,8 @@ function FilterSelect({ label, className, children, ...props }) {
 
 export default function EventsPage() {
   const [category, setCategory] = useState('All categories')
-  const [sortOrder, setSortOrder] = useState('soonest')
-  const [pageSize, setPageSize] = useState(3)
+  const [sortOrder, setSortOrder] = useState('newest')
+  const [pageSize, setPageSize] = useState(9)
   const [search, setSearch] = useState('')
   const [view, setView] = useState('grid')
   const [page, setPage] = useState(1)
@@ -84,7 +83,7 @@ export default function EventsPage() {
       })
       .sort((first, second) => {
         const difference = getEventDate(first) - getEventDate(second)
-        return sortOrder === 'soonest' ? -difference : difference
+        return sortOrder === 'newest' ? -difference : difference
       })
   }, [category, search, sortOrder])
 
@@ -123,8 +122,8 @@ export default function EventsPage() {
               onChange={(event) => updateFilter(setSortOrder, event.target.value)}
               className="w-40"
             >
-              <option value="soonest">Soonest</option>
-              <option value="latest">Latest</option>
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
             </FilterSelect>
             <FilterSelect
               label="Show"
@@ -193,61 +192,12 @@ export default function EventsPage() {
           ) : (
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {visibleEvents.map((event) => (
-                <article
-                  key={event.id}
-                  className="group flex min-h-72 flex-col rounded border border-gray-400 bg-white p-6 transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-card"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-4xl leading-none font-black text-primary">
-                        {event.day}
-                      </span>
-                      <span className="font-bold text-dark">{event.month}</span>
-                    </div>
-                    <span className="rounded bg-primary/10 px-2 py-1 text-xs font-bold text-primary">
-                      {event.type}
-                    </span>
-                  </div>
-                  <h2 className="mt-7 text-xl leading-snug font-bold">
-                    <Link
-                      to={ROUTES.event(event.id)}
-                      className="transition-colors group-hover:text-primary"
-                    >
-                      {event.title}
-                    </Link>
-                  </h2>
-                  <div className="mt-auto flex items-center gap-2 pt-6 text-sm text-gray-700">
-                    <HiOutlineCalendarDays aria-hidden="true" />
-                    {event.month} {event.day}
-                    <span className="mx-1 text-gray-500">|</span>
-                    <HiOutlineClock aria-hidden="true" />
-                    {event.time}
-                  </div>
-                  <Button
-                    to={ROUTES.event(event.id)}
-                    variant="outline"
-                    size="sm"
-                    className="mt-5 self-start"
-                  >
-                    View more
-                  </Button>
-                </article>
+                <EventCard key={event.id} event={event} as="h2" />
               ))}
             </div>
           )
         ) : (
           <p className="py-20 text-center text-gray-700">No events found. Try another search.</p>
-        )}
-
-        {filteredEvents.length > visibleEvents.length && (
-          <div className="mt-10 flex justify-center">
-            <Button
-              variant="outline"
-              onClick={() => updatePageSize(Math.min(pageSize + 3, filteredEvents.length))}
-            >
-              View more
-            </Button>
-          </div>
         )}
 
         {pageCount > 1 && (
