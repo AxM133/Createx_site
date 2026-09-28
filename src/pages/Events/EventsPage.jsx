@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import {
   HiArrowLeft,
   HiArrowRight,
+  HiChevronDown,
   HiMagnifyingGlass,
   HiOutlineBars3,
   HiOutlineCalendarDays,
@@ -34,6 +35,28 @@ const monthNumbers = {
 
 function getEventDate(event) {
   return monthNumbers[event.month] * 100 + Number(event.day)
+}
+
+const controlClass =
+  'h-11 w-full rounded border border-gray-500 bg-white text-sm text-gray-800 transition-[border-color,box-shadow] duration-300 outline-none hover:border-gray-600 focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/15'
+
+/** Select фильтра: своя стрелка вместо браузерной, одинаковая высота и отступы */
+function FilterSelect({ label, className, children, ...props }) {
+  return (
+    <label className="flex items-center gap-3 text-sm font-bold whitespace-nowrap text-dark">
+      {label}
+      <span className={`relative block ${className}`}>
+        <select {...props} className={`${controlClass} cursor-pointer appearance-none pr-10 pl-4 font-normal`}>
+          {children}
+        </select>
+        <HiChevronDown
+          aria-hidden="true"
+          size={16}
+          className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-700"
+        />
+      </span>
+    </label>
+  )
 }
 
 export default function EventsPage() {
@@ -78,67 +101,62 @@ export default function EventsPage() {
 
   return (
     <>
-      <main className="container-site py-16 lg:py-24">
+      <section className="container-site py-16 lg:py-24">
         <SectionHeading eyebrow="Our events" title="Lectures, workshops & master-classes" />
 
-        <div className="mt-10 flex flex-col gap-5 border-y border-gray-400 py-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex flex-wrap gap-4 sm:gap-6">
-            <label className="flex items-center gap-3 text-sm font-bold text-dark">
-              Event category
-              <select
-                value={category}
-                onChange={(event) => updateFilter(setCategory, event.target.value)}
-                className="h-11 min-w-44 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
-              >
-                <option>All categories</option>
-                {categories.map((item) => (
-                  <option key={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-            <label className="flex items-center gap-3 text-sm font-bold text-dark">
-              Sort by
-              <select
-                value={sortOrder}
-                onChange={(event) => updateFilter(setSortOrder, event.target.value)}
-                className="h-11 min-w-36 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
-              >
-                <option value="soonest">Soonest</option>
-                <option value="latest">Latest</option>
-              </select>
-            </label>
-            <label className="flex items-center gap-3 text-sm font-bold text-dark">
-              Show
-              <select
-                value={pageSize}
-                onChange={(event) => updatePageSize(event.target.value)}
-                className="h-11 min-w-20 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
-              >
-                {pageSizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-            </label>
+        <div className="mt-10 flex flex-col gap-5 border-y border-gray-400 py-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+            <FilterSelect
+              label="Event category"
+              value={category}
+              onChange={(event) => updateFilter(setCategory, event.target.value)}
+              className="w-48"
+            >
+              <option>All categories</option>
+              {categories.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </FilterSelect>
+            <FilterSelect
+              label="Sort by"
+              value={sortOrder}
+              onChange={(event) => updateFilter(setSortOrder, event.target.value)}
+              className="w-40"
+            >
+              <option value="soonest">Soonest</option>
+              <option value="latest">Latest</option>
+            </FilterSelect>
+            <FilterSelect
+              label="Show"
+              value={pageSize}
+              onChange={(event) => updatePageSize(event.target.value)}
+              className="w-24"
+            >
+              {pageSizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </FilterSelect>
           </div>
 
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-            <label className="relative block sm:w-56">
+          <div className="flex items-center gap-4">
+            <label className="relative block flex-1 lg:w-64 lg:flex-none">
               <span className="sr-only">Search events</span>
               <input
                 type="search"
                 value={search}
                 onChange={(event) => updateFilter(setSearch, event.target.value)}
                 placeholder="Search event..."
-                className="h-11 w-full rounded border border-gray-500 bg-white py-2 pr-10 pl-3 text-sm outline-none placeholder:text-gray-700 focus:border-primary"
+                className={`${controlClass} pr-10 pl-4 placeholder:text-gray-600 [&::-webkit-search-cancel-button]:hidden`}
               />
               <HiMagnifyingGlass
                 aria-hidden="true"
-                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-700"
+                size={18}
+                className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-700"
               />
             </label>
-            <div className="flex items-center gap-1" aria-label="Event view">
+            <div className="flex shrink-0 items-center gap-1" role="group" aria-label="Event view">
               <button
                 type="button"
                 aria-label="List view"
@@ -267,7 +285,7 @@ export default function EventsPage() {
             </button>
           </nav>
         )}
-      </main>
+      </section>
       <SubscribeSection />
     </>
   )

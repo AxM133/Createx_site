@@ -13,11 +13,14 @@ export default function SignUpModal() {
   }
 
   return (
-    <div className="w-full max-w-[400px] overflow-hidden rounded-[4px] bg-white text-[#1e212c] shadow-2xl">
-      <div className="px-8 pt-7 pb-5">
+    // Фон, тень и скругление даёт Modal — здесь только содержимое на всю ширину окна
+    <div className="w-full text-[#1e212c]">
+      <div className="px-8 pt-10 pb-5 sm:px-10">
         {/* Title */}
         <div className="text-center">
-          <h2 className="text-[28px] leading-tight font-bold text-[#1e212c]">Sign up</h2>
+          <h2 id="auth-modal-title" className="text-[28px] leading-tight font-bold text-[#1e212c]">
+            Sign up
+          </h2>
 
           <p className="mx-auto mt-3 max-w-[310px] text-[12px] leading-[17px] text-[#787A80]">
             Registration takes less than a minute but gives you full control over your studying.
