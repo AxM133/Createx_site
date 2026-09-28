@@ -1,30 +1,274 @@
-import PagePlaceholder from '@/components/ui/PagePlaceholder'
+import { useMemo, useState } from 'react'
+import {
+  HiArrowLeft,
+  HiArrowRight,
+  HiMagnifyingGlass,
+  HiOutlineBars3,
+  HiOutlineCalendarDays,
+  HiOutlineSquares2X2,
+  HiOutlineClock,
+} from 'react-icons/hi2'
+import { Link } from 'react-router-dom'
+import EventRow from '@/components/cards/EventRow'
+import SubscribeSection from '@/components/sections/SubscribeSection'
+import Button from '@/components/ui/Button'
+import SectionHeading from '@/components/ui/SectionHeading'
+import { events } from '@/data/events'
+import { ROUTES } from '@/router/paths'
 
-/**
- * Events — список событий (Grid View)
- * Разработчик: Бахтовар
- */
+const pageSizes = [3, 6, 9]
+const monthNumbers = {
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
+}
+
+function getEventDate(event) {
+  return monthNumbers[event.month] * 100 + Number(event.day)
+}
+
 export default function EventsPage() {
+  const [category, setCategory] = useState('All categories')
+  const [sortOrder, setSortOrder] = useState('soonest')
+  const [pageSize, setPageSize] = useState(3)
+  const [search, setSearch] = useState('')
+  const [view, setView] = useState('grid')
+  const [page, setPage] = useState(1)
+
+  const categories = [...new Set(events.map((event) => event.type))]
+  const filteredEvents = useMemo(() => {
+    const normalizedSearch = search.trim().toLowerCase()
+
+    return events
+      .filter((event) => {
+        const matchesCategory = category === 'All categories' || event.type === category
+        const matchesSearch =
+          !normalizedSearch ||
+          `${event.title} ${event.type} ${event.month} ${event.day}`
+            .toLowerCase()
+            .includes(normalizedSearch)
+
+        return matchesCategory && matchesSearch
+      })
+      .sort((first, second) => {
+        const difference = getEventDate(first) - getEventDate(second)
+        return sortOrder === 'soonest' ? -difference : difference
+      })
+  }, [category, search, sortOrder])
+
+  const pageCount = Math.ceil(filteredEvents.length / pageSize)
+  const visibleEvents = filteredEvents.slice((page - 1) * pageSize, page * pageSize)
+  const updatePageSize = (value) => {
+    setPageSize(Number(value))
+    setPage(1)
+  }
+  const updateFilter = (setter, value) => {
+    setter(value)
+    setPage(1)
+  }
+
   return (
-    <PagePlaceholder
-      title="Events — Lectures, workshops & master-classes"
-      developer="Бахтовар"
-      route="/events"
-      design="Events Grid View (+ переключатель на List View)"
-      tasks={[
-        'Заголовок «Our events / Lectures, workshops & master-classes»',
-        'Фильтры: Event category, Sort by, Show N per page, поиск',
-        'Переключатель List / Grid view',
-        'Сетка карточек событий 3 в ряд, кнопка View more',
-        'Пагинация',
-        'Subscribe секция внизу',
-      ]}
-      reuse={[
-        '@/data/events',
-        '@/components/cards/EventRow (List view — уже готов)',
-        '@/components/sections/SubscribeSection',
-        '@/components/ui/SectionHeading, Button',
-      ]}
-    />
+    <>
+      <main className="container-site py-16 lg:py-24">
+        <SectionHeading eyebrow="Our events" title="Lectures, workshops & master-classes" />
+
+        <div className="mt-10 flex flex-col gap-5 border-y border-gray-400 py-5 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex flex-wrap gap-4 sm:gap-6">
+            <label className="flex items-center gap-3 text-sm font-bold text-dark">
+              Event category
+              <select
+                value={category}
+                onChange={(event) => updateFilter(setCategory, event.target.value)}
+                className="h-11 min-w-44 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
+              >
+                <option>All categories</option>
+                {categories.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </select>
+            </label>
+            <label className="flex items-center gap-3 text-sm font-bold text-dark">
+              Sort by
+              <select
+                value={sortOrder}
+                onChange={(event) => updateFilter(setSortOrder, event.target.value)}
+                className="h-11 min-w-36 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
+              >
+                <option value="soonest">Soonest</option>
+                <option value="latest">Latest</option>
+              </select>
+            </label>
+            <label className="flex items-center gap-3 text-sm font-bold text-dark">
+              Show
+              <select
+                value={pageSize}
+                onChange={(event) => updatePageSize(event.target.value)}
+                className="h-11 min-w-20 rounded border border-gray-500 bg-white px-3 font-normal outline-none focus:border-primary"
+              >
+                {pageSizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <label className="relative block sm:w-56">
+              <span className="sr-only">Search events</span>
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => updateFilter(setSearch, event.target.value)}
+                placeholder="Search event..."
+                className="h-11 w-full rounded border border-gray-500 bg-white py-2 pr-10 pl-3 text-sm outline-none placeholder:text-gray-700 focus:border-primary"
+              />
+              <HiMagnifyingGlass
+                aria-hidden="true"
+                className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-700"
+              />
+            </label>
+            <div className="flex items-center gap-1" aria-label="Event view">
+              <button
+                type="button"
+                aria-label="List view"
+                aria-pressed={view === 'list'}
+                onClick={() => setView('list')}
+                className={`grid size-11 place-items-center rounded transition-colors ${
+                  view === 'list' ? 'text-primary' : 'text-gray-700 hover:text-dark'
+                }`}
+              >
+                <HiOutlineBars3 size={21} />
+              </button>
+              <button
+                type="button"
+                aria-label="Grid view"
+                aria-pressed={view === 'grid'}
+                onClick={() => setView('grid')}
+                className={`grid size-11 place-items-center rounded transition-colors ${
+                  view === 'grid' ? 'text-primary' : 'text-gray-700 hover:text-dark'
+                }`}
+              >
+                <HiOutlineSquares2X2 size={20} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {visibleEvents.length ? (
+          view === 'list' ? (
+            <div className="mt-10 space-y-4">
+              {visibleEvents.map((event) => (
+                <EventRow key={event.id} event={event} />
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {visibleEvents.map((event) => (
+                <article
+                  key={event.id}
+                  className="group flex min-h-72 flex-col rounded border border-gray-400 bg-white p-6 transition-[translate,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-card"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-4xl leading-none font-black text-primary">
+                        {event.day}
+                      </span>
+                      <span className="font-bold text-dark">{event.month}</span>
+                    </div>
+                    <span className="rounded bg-primary/10 px-2 py-1 text-xs font-bold text-primary">
+                      {event.type}
+                    </span>
+                  </div>
+                  <h2 className="mt-7 text-xl leading-snug font-bold">
+                    <Link
+                      to={ROUTES.event(event.id)}
+                      className="transition-colors group-hover:text-primary"
+                    >
+                      {event.title}
+                    </Link>
+                  </h2>
+                  <div className="mt-auto flex items-center gap-2 pt-6 text-sm text-gray-700">
+                    <HiOutlineCalendarDays aria-hidden="true" />
+                    {event.month} {event.day}
+                    <span className="mx-1 text-gray-500">|</span>
+                    <HiOutlineClock aria-hidden="true" />
+                    {event.time}
+                  </div>
+                  <Button
+                    to={ROUTES.event(event.id)}
+                    variant="outline"
+                    size="sm"
+                    className="mt-5 self-start"
+                  >
+                    View more
+                  </Button>
+                </article>
+              ))}
+            </div>
+          )
+        ) : (
+          <p className="py-20 text-center text-gray-700">No events found. Try another search.</p>
+        )}
+
+        {filteredEvents.length > visibleEvents.length && (
+          <div className="mt-10 flex justify-center">
+            <Button
+              variant="outline"
+              onClick={() => updatePageSize(Math.min(pageSize + 3, filteredEvents.length))}
+            >
+              View more
+            </Button>
+          </div>
+        )}
+
+        {pageCount > 1 && (
+          <nav className="mt-12 flex items-center justify-center gap-2" aria-label="Event pages">
+            <button
+              type="button"
+              aria-label="Previous page"
+              disabled={page === 1}
+              onClick={() => setPage((current) => current - 1)}
+              className="grid size-10 place-items-center rounded text-dark transition-colors hover:text-primary disabled:text-gray-500"
+            >
+              <HiArrowLeft />
+            </button>
+            {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+              <button
+                key={pageNumber}
+                type="button"
+                aria-current={page === pageNumber ? 'page' : undefined}
+                onClick={() => setPage(pageNumber)}
+                className={`grid size-10 place-items-center rounded text-sm font-bold transition-colors ${
+                  page === pageNumber ? 'text-primary' : 'text-dark hover:text-primary'
+                }`}
+              >
+                {pageNumber}
+              </button>
+            ))}
+            <button
+              type="button"
+              aria-label="Next page"
+              disabled={page === pageCount}
+              onClick={() => setPage((current) => current + 1)}
+              className="grid size-10 place-items-center rounded text-dark transition-colors hover:text-primary disabled:text-gray-500"
+            >
+              <HiArrowRight />
+            </button>
+          </nav>
+        )}
+      </main>
+      <SubscribeSection />
+    </>
   )
 }
